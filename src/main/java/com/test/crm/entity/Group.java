@@ -1,16 +1,22 @@
-package com.test.project.entity;
+package com.test.crm.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-public class Group implements Base {
+@Table(name = "crm_group")
+public class Group implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.DATE)
     private Date createdAt;
 
     public Group() {

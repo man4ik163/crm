@@ -1,27 +1,33 @@
-package com.test.project.entity;
+package com.test.crm.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-public class Product implements Base {
+@Table(name = "crm_product")
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.DATE)
     private Date createdAt;
+    @Column(name = "article")
     private String article;
-    private Long groupId;
+    @ManyToOne()
+    @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false)
+    private Group groupId;
 
     public Product() {
     }
 
-    public Product(Long id, String name, Date createdAt, String article, Long groupId) {
+    public Product(Long id, String name, Date createdAt, String article, Group groupId) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
@@ -29,39 +35,33 @@ public class Product implements Base {
         this.groupId = groupId;
     }
 
-    public Product(String name, Date createdAt, String article, Long groupId) {
+    public Product(String name, Date createdAt, String article, Group groupId) {
         this.name = name;
         this.createdAt = createdAt;
         this.article = article;
         this.groupId = groupId;
     }
 
-    @Override
     public Long getId() {
         return id;
     }
 
-    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    @Override
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
@@ -74,11 +74,11 @@ public class Product implements Base {
         this.article = article;
     }
 
-    public Long getGroupId() {
+    public Group getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
+    public void setGroupId(Group groupId) {
         this.groupId = groupId;
     }
 
