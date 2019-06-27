@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupService {
 
@@ -15,5 +16,7 @@ public interface GroupService {
 
     void createGroup(Group group);
 
-    Group getGroupById(Long id);
+    Group findById(Long id);
+
+    void deleteGroup(Group group);
 }

@@ -13,4 +13,5 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     @Query("select g from Group g where g.name = :name")
     List<Group> findAllByName(@Param("name") String name);
+
 }

@@ -1,5 +1,6 @@
 package com.test.crm.service;
 
+import com.test.crm.entity.Group;
 import com.test.crm.entity.Product;
 import com.test.crm.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public List<Product> findAllByGroupId(Long id) {
-        return productRepository.findAllByGroupId(id);
+    public List<Product> findAllByGroupId(Group group) {
+        return productRepository.findAllByGroupId(group);
+    }
+
+    @Transactional
+    public void deleteProduct(Product product){
+        productRepository.delete(product);
+    }
+
+    @Transactional
+    public Product findById(Long id){
+        return productRepository.getOne(id);
     }
 }

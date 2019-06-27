@@ -36,11 +36,9 @@ public class ProjectApplication {
 
     @EventListener(ApplicationReadyEvent.class)
     private void testJpaMethods() {
-        Group group = new Group();
-        group.setName("name");
-        group.setCreatedAt(new Date());
-		groupService.createGroup(group);
-        groupService.findAll().forEach(System.out::println);
+//        Product product = new Product();
+//        product.setName("name1");
+//        groupService.findAll().forEach(System.out::println);
     }
 
 }

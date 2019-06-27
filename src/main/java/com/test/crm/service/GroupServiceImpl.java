@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -34,7 +35,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Transactional
-    public Group getGroupById(Long id){
+    public Group findById(Long id){
         return groupRepository.getOne(id);
+    }
+
+    @Transactional
+    public void deleteGroup(Group group){
+        groupRepository.delete(group);
     }
 }

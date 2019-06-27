@@ -2,6 +2,7 @@ package com.test.crm.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +27,7 @@ public class Product implements Serializable {
     @Column(name = "name")
     String name;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     Date createdAt;
