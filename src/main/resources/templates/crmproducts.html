@@ -1,0 +1,25 @@
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Display Products Details</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>CREATED_AT</th>
+        <th>ARTICLE</th>
+        <th>GROUP_ID</th>
+    </tr>
+    <tr th:each="product : ${productsList}">
+        <td th:text="${product.id}">ID</td>
+        <td th:text="${product.name}">NAME</td>
+        <td th:text="${product.createdAt}">CREATED_AT</td>
+        <td th:text="${product.article}">ARTICLE</td>
+        <td th:text="${product.groupId}">GROUP_ID</td>
+
+    </tr>
+</table>
+</body>
+</html>

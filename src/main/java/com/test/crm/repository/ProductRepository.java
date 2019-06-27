@@ -14,6 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select p from Product p where p.name = :name")
     List<Product> findAllByName(@Param("name") String name);
 
-
-
+    List<Product> findAllByGroupId(Long id);
 }

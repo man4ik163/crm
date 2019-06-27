@@ -1,0 +1,21 @@
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Display Grops Details</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>CREATED_AT</th>
+    </tr>
+    <tr th:each="group : ${groupsList}">
+        <td th:text="${group.id}"></td>
+        <td> <a href="crmproductsredirect" th:href="@{crmproductsredirect(postId=${group.id})}" th:text="${group.name}"></a></td>
+<!--        <td th:text="${group.name}">NAME</td>-->
+        <td th:text="${group.createdAt}"></td>
+    </tr>
+</table>
+</body>
+</html>
