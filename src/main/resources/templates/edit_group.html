@@ -8,14 +8,17 @@
 <div>
     <form action="#" th:action="@{save_group}" th:object="${group}" method="post">
         <label>ID</label>
+        <br>
         <input type="text" id="id" name="id" th:field="${group.id}" th:readonly="true"/>
         <br>
         <br>
         <label>NAME</label>
+        <br>
         <input type="text" id="name" name="name" th:field="${group.name}"/>
         <br>
         <br>
         <label>CREATED_AT</label>
+        <br>
         <input type="date" id="createdAt" name="createdAt" th:field="${group.createdAt}" th:readonly="true"/>
         <br>
         <br>

@@ -25,6 +25,7 @@ public class GroupController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("crmgroups");
         mav.addObject("groupsList", groupService.findAll());
+        mav.addObject("group", new Group());
         return mav;
     }
 
@@ -50,6 +51,15 @@ public class GroupController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("edit_group");
         mav.addObject("group", group);
+        return mav;
+    }
+
+    @RequestMapping(value = "/create_group", method = RequestMethod.POST)
+    public ModelAndView createGroup(@ModelAttribute Group group, Model model) {
+        groupService.createGroup(group);
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("crmgroups");
+        mav.addObject("groupsList", groupService.findAll());
         return mav;
     }
 }

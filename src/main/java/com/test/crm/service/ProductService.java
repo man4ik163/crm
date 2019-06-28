@@ -20,4 +20,6 @@ public interface ProductService {
     void deleteProduct(Product product);
 
     Product findById(Long id);
+
+    List<Product> findAllByArticle(String article);
 }

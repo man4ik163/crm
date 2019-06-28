@@ -5,6 +5,36 @@
 </head>
 <body>
 <table border="1">
+    <form th:action="@{create_product}" th:object="${product}" method="post">
+        <input type="hidden" name="errorGroupId" th:value="${errorGroupId}" />
+        <label>NAME</label>
+        <br>
+        <input type="text" id="name" name="name" th:field="${product.name}" class="form-control"/>
+        <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{error.name}">Error name</label>
+        <br>
+        <br>
+        <label>CREATED_AT</label>
+        <br>
+        <input type="date" id="createdAt" name="createdAt" th:field="${product.createdAt}" class="form-control"/>
+        <label th:if="${#fields.hasErrors('createdAt')}" th:class="'error'" th:errors="*{error.createdAt}">Error createdAt</label>
+        <br>
+        <br>
+        <label>ARTICLE</label>
+        <br>
+        <input type="text" id="article" name="article" th:field="${product.article}" class="form-control"/>
+        <label th:if="${#fields.hasErrors('article')}" th:class="'error'" th:errors="*{error.article}">Error article</label>
+        <br>
+        <br>
+        <label>GROUP_ID</label>
+        <br>
+        <input type="text" id="groupId" name="groupId" th:field="${product.groupId}" class="form-control"/>
+        <label th:if="${#fields.hasErrors('groupId')}" th:class="'error'" th:errors="*{error.groupId}">Error groupId</label>
+        <br>
+        <br>
+        <input type="submit" value="Create" class="btn btn-danger"/>
+    </form>
+    <br>
+    <br>
     <tr>
         <th>ID</th>
         <th>NAME</th>

@@ -6,11 +6,15 @@ import com.test.crm.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 public class ProductController {
@@ -30,6 +34,8 @@ public class ProductController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("crmproducts");
         mav.addObject("productsList", productService.findAllByGroupId(groupService.findById(Long.valueOf(groupId))));
+        mav.addObject("product", new Product());
+        mav.addObject("errorGroupId", groupId);
         return mav;
     }
 
@@ -51,10 +57,28 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/save_product", method = RequestMethod.POST)
-    public ModelAndView saveProduct(@ModelAttribute Product product, Model model) {
+    public ModelAndView saveProduct(@ModelAttribute("product") Product product, Model model) {
         productService.createProduct(product);
         ModelAndView mav = new ModelAndView();
         mav.setViewName("edit_product");
+        mav.addObject("product", product);
+        return mav;
+    }
+    @RequestMapping(value = "/create_product", method = RequestMethod.POST)
+    public ModelAndView createProduct(@ModelAttribute("product") @Valid Product product, BindingResult bindingResult,
+                                @ModelAttribute("errorGroupId") String groupId, Model model) {
+        if(!bindingResult.hasErrors() && product.getArticle() != null && !product.getArticle().isEmpty()
+                && productService.findAllByArticle(product.getArticle()).isEmpty()) {
+            productService.createProduct(product);
+            //return "redirect:/crmproducts?groupId=" + groupId;
+        }
+//        FieldError error = new FieldError("groupId", "error.article",
+//                "Error");
+//        bindingResult.addError(error);
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("crmproducts");
+        
+        mav.addObject("groupId",product.getId());
         mav.addObject("product", product);
         return mav;
     }

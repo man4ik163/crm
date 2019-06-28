@@ -8,22 +8,27 @@
 <div>
     <form action="#" th:action="@{save_product}" th:object="${product}" method="post">
         <label>ID</label>
+        <br>
         <input type="text" id="id" name="id" th:field="${product.id}" th:readonly="true"/>
         <br>
         <br>
         <label>NAME</label>
+        <br>
         <input type="text" id="name" name="name" th:field="${product.name}"/>
         <br>
         <br>
         <label>CREATED_AT</label>
+        <br>
         <input type="date" id="createdAt" name="createdAt" th:field="${product.createdAt}" th:readonly="true"/>
         <br>
         <br>
         <label>ARTICLE</label>
+        <br>
         <input type="text" id="article" name="article" th:field="${product.article}"/>
         <br>
         <br>
         <label>GROUP_ID</label>
+        <br>
         <input type="text" id="groupId" name="groupId" th:field="${product.groupId.id}"/>
         <br>
         <br>

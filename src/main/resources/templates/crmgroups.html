@@ -6,12 +6,23 @@
 <body>
 <table border="1">
     <tr>
-        <form th:action="@{create_group}" method="get">
-            <input type="hidden" name="name" th:value="${group.id}" />
-            <input type="hidden" name="createdAt" th:value="${group.id}" />
-            <input type="submit" value="Save" class="btn btn-danger" />
+        <form th:action="@{create_group}" method="post">
+            <label>NAME</label>
+            <br>
+            <input type="text" id="name" name="name" th:field="${group.name}" />
+            <br>
+            <br>
+            <label>CREATED_AT</label>
+            <br>
+            <input type="date" id="createdAt" name="createdAt" th:field="${group.createdAt}"/>
+            <br>
+            <br>
+            <input type="submit" value="Create" class="btn btn-danger" />
         </form>
     </tr>
+    <br>
+    <br>
+
     <tr>
         <th>ID</th>
         <th>NAME</th>
@@ -22,7 +33,7 @@
         <td>
             <a th:href="@{/crmproducts(groupId=${group.id})}" class="btn btn-danger" th:text="${group.name}"></a>
         </td>
-        <td th:text="${group.createdAt}"></td>
+        <td th:text="${#dates.format(group.createdAt, 'yyyy-MM-dd')}"></td>
         <td>
             <form th:action="@{delete_group}" method="get">
                 <input type="hidden" name="groupId" th:value="${group.id}" />

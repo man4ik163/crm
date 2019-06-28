@@ -48,4 +48,9 @@ public class ProductServiceImpl implements ProductService {
     public Product findById(Long id){
         return productRepository.getOne(id);
     }
+
+    @Transactional
+    public List<Product> findAllByArticle(String article){
+        return productRepository.findAllByArticle(article);
+    }
 }

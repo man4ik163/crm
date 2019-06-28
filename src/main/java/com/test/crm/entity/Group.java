@@ -5,6 +5,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,9 +25,12 @@ public class Group implements Serializable {
     @NonNull
     Long id;
 
+    @NotEmpty(message = "the field must not be empty")
+    @NotNull(message = "the field must not be empty")
     @Column(name = "name")
     String name;
 
+    @NotNull(message = "the field must not be empty")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
