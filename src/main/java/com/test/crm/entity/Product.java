@@ -43,7 +43,7 @@ public class Product implements Serializable {
     @Column(name = "article")
     String article;
 
-    @NotNull(message = "the field must not be empty")
+    @NotNull(message = "not valid groupId")
     @ManyToOne()
     @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false)
     Group groupId;

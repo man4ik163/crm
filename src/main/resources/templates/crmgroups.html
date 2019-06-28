@@ -6,15 +6,17 @@
 <body>
 <table border="1">
     <tr>
-        <form th:action="@{create_group}" method="post">
+        <form th:action="@{crmgroups}" th:object="${group}" method="post">
             <label>NAME</label>
             <br>
-            <input type="text" id="name" name="name" th:field="${group.name}" />
+            <input type="text" id="name" name="name" th:field="${group.name}" class="form-control"/>
+            <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
             <br>
             <br>
             <label>CREATED_AT</label>
             <br>
-            <input type="date" id="createdAt" name="createdAt" th:field="${group.createdAt}"/>
+            <input type="date" id="createdAt" name="createdAt" th:field="${group.createdAt}" class="form-control"/>
+            <label th:if="${#fields.hasErrors('createdAt')}" th:class="'error'" th:errors="*{createdAt}">Error createdAt</label>
             <br>
             <br>
             <input type="submit" value="Create" class="btn btn-danger" />

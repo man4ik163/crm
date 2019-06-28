@@ -64,22 +64,34 @@ public class ProductController {
         mav.addObject("product", product);
         return mav;
     }
-    @RequestMapping(value = "/create_product", method = RequestMethod.POST)
+    @RequestMapping(value = "/crmproducts", method = RequestMethod.POST)
     public ModelAndView createProduct(@ModelAttribute("product") @Valid Product product, BindingResult bindingResult,
                                 @ModelAttribute("errorGroupId") String groupId, Model model) {
-        if(!bindingResult.hasErrors() && product.getArticle() != null && !product.getArticle().isEmpty()
-                && productService.findAllByArticle(product.getArticle()).isEmpty()) {
-            productService.createProduct(product);
-            //return "redirect:/crmproducts?groupId=" + groupId;
-        }
-//        FieldError error = new FieldError("groupId", "error.article",
-//                "Error");
-//        bindingResult.addError(error);
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("crmproducts");
-        
-        mav.addObject("groupId",product.getId());
-        mav.addObject("product", product);
+        if(bindingResult.hasErrors()) {
+            mav.setViewName("crmproducts");
+            mav.addObject("groupId", groupId);
+            return mav;
+        }
+        if (product.getArticle() != null && !product.getArticle().isEmpty()
+                && !productService.findAllByArticle(product.getArticle()).isEmpty()) {
+            FieldError fieldError = new FieldError("product", "article", "not unique article");
+            bindingResult.addError(fieldError);
+            mav.setViewName("crmproducts");
+            mav.addObject("groupId", groupId);
+            return mav;
+        }
+
+        if (product.getGroupId() != null
+                && groupService.findById(product.getGroupId().getId()) == null) {
+            FieldError fieldError = new FieldError("product", "groupId", "not valid groupId");
+            bindingResult.addError(fieldError);
+            mav.setViewName("crmproducts");
+            mav.addObject("groupId", groupId);
+            return mav;
+        }
+        productService.createProduct(product);
+        mav.setViewName("redirect:/crmproducts?groupId=" + product.getGroupId().getId());
         return mav;
     }
 }
