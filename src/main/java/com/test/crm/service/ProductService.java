@@ -1,9 +1,7 @@
 package com.test.crm.service;
 
-import com.test.crm.entity.Group;
-import com.test.crm.entity.Product;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
+import com.test.crm.model.Group;
+import com.test.crm.model.Product;
 
 import java.util.List;
 

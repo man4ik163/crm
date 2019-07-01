@@ -63,5 +63,14 @@
 
     </tr>
 </table>
+<br>
+<br>
+<form action="crmgroups" >
+    <input type="submit" value="To groups" class="btn btn-danger"/>
+</form>
+<form action="send_products_report" method="post">
+    <input type="hidden" name="errorGroupId" th:value="${errorGroupId}" />
+    <input type="submit" value="Send report" class="btn btn-danger"/>
+</form>
 </body>
 </html>

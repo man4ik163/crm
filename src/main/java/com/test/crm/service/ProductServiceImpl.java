@@ -1,7 +1,7 @@
 package com.test.crm.service;
 
-import com.test.crm.entity.Group;
-import com.test.crm.entity.Product;
+import com.test.crm.model.Group;
+import com.test.crm.model.Product;
 import com.test.crm.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,8 @@
 package com.test.crm.controller;
 
-import com.test.crm.entity.Product;
+import com.test.crm.messaging.Producer;
+import com.test.crm.model.Product;
+import com.test.crm.model.ProductStorage;
 import com.test.crm.service.GroupServiceImpl;
 import com.test.crm.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class ProductController {
@@ -24,18 +27,27 @@ public class ProductController {
     @Autowired
     private final GroupServiceImpl groupService;
 
-    public ProductController(ProductServiceImpl productService, GroupServiceImpl groupService) {
+    @Autowired
+    private final ProductStorage productStorage;
+
+    @Autowired
+    private final Producer producer;
+
+    public ProductController(ProductServiceImpl productService, GroupServiceImpl groupService, ProductStorage productStorage, Producer producer) {
         this.productService = productService;
         this.groupService = groupService;
+        this.productStorage = productStorage;
+        this.producer = producer;
     }
 
     @RequestMapping(value = "/crmproducts", method = RequestMethod.GET)
     public ModelAndView crmProducts(@RequestParam(name="groupId")String groupId) {
+        List<Product> products = productService.findAllByGroupId(groupService.findById(Long.valueOf(groupId)));
         ModelAndView mav = new ModelAndView();
         mav.setViewName("crmproducts");
-        mav.addObject("productsList", productService.findAllByGroupId(groupService.findById(Long.valueOf(groupId))));
+        if(products != null && !products.isEmpty()) mav.addObject("productsList", products);
         mav.addObject("product", new Product());
-        mav.addObject("errorGroupId", groupId);
+        mav.addObject("errorGroupId", groupId); //TODO change name
         return mav;
     }
 
@@ -92,6 +104,21 @@ public class ProductController {
         }
         productService.createProduct(product);
         mav.setViewName("redirect:/crmproducts?groupId=" + product.getGroupId().getId());
+        return mav;
+    }
+
+    @RequestMapping(value = "/send_products_report", method = RequestMethod.POST)
+    public ModelAndView sendGroupsReport(@ModelAttribute("errorGroupId") String groupId, Model model) {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("crmproducts");
+        List<Product> products = productService.findAllByGroupId(groupService.findById(Long.valueOf(groupId)));
+        if(products != null && !products.isEmpty()){
+            mav.addObject("productsList", products);
+            productStorage.addAll(products);
+            producer.send(productStorage);
+        }
+        mav.addObject("product", new Product());
+        mav.addObject("groupId", groupId);
         return mav;
     }
 }

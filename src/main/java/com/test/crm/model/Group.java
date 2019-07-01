@@ -1,4 +1,4 @@
-package com.test.crm.entity;
+package com.test.crm.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,12 +25,12 @@ public class Group implements Serializable {
     @NonNull
     Long id;
 
-    @NotEmpty(message = "the field must not be empty")
-    @NotNull(message = "the field must not be empty")
+    @NotEmpty(message = "not valid name")
+    @NotNull(message = "not valid name")
     @Column(name = "name")
     String name;
 
-    @NotNull(message = "the field must not be empty")
+    @NotNull(message = "not valid createdAt")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)

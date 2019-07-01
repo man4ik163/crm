@@ -1,12 +1,8 @@
 package com.test.crm.service;
 
-import com.test.crm.entity.Group;
-import com.test.crm.repository.GroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.test.crm.model.Group;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GroupService {
 

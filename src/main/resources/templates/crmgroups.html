@@ -50,5 +50,11 @@
         </td>
     </tr>
 </table>
+<br>
+<br>
+<form action="send_groups_report" method="post">
+    <input type="hidden" name="groups" th:value="${groupsList}" />
+    <input type="submit" value="Send report" class="btn btn-danger"/>
+</form>
 </body>
 </html>
