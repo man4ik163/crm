@@ -2,6 +2,8 @@ package com.test.crm.repository;
 
 import com.test.crm.model.Group;
 import com.test.crm.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByGroupId(Group group);
 
     List<Product> findAllByArticle(String article);
+
+    Page<Product> findAll(Pageable pageable);
+
+    Page<Product> findAllByGroupId(Group groupId, Pageable pageable);
 }

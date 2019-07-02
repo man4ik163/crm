@@ -4,6 +4,8 @@ import com.test.crm.model.Group;
 import com.test.crm.model.Product;
 import com.test.crm.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +54,15 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public List<Product> findAllByArticle(String article){
         return productRepository.findAllByArticle(article);
+    }
+
+    @Transactional
+    public Page<Product> findAllPages(Pageable pageable){
+        return productRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public Page<Product> findAllPages(Group groupId, Pageable pageable){
+        return productRepository.findAllByGroupId(groupId, pageable);
     }
 }

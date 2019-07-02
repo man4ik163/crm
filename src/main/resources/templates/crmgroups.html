@@ -1,60 +1,89 @@
-<html xmlns:th="http://thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Display Grops Details</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Groups</title>
+
 </head>
 <body>
-<table border="1">
-    <tr>
-        <form th:action="@{crmgroups}" th:object="${group}" method="post">
-            <label>NAME</label>
-            <br>
-            <input type="text" id="name" name="name" th:field="${group.name}" class="form-control"/>
-            <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
-            <br>
-            <br>
-            <label>CREATED_AT</label>
-            <br>
-            <input type="date" id="createdAt" name="createdAt" th:field="${group.createdAt}" class="form-control"/>
-            <label th:if="${#fields.hasErrors('createdAt')}" th:class="'error'" th:errors="*{createdAt}">Error createdAt</label>
-            <br>
-            <br>
-            <input type="submit" value="Create" class="btn btn-danger" />
-        </form>
-    </tr>
-    <br>
-    <br>
+<div class="container">
+    <div th:if="${not #lists.isEmpty(crmgroups)}">
+        <h2>List groups</h2>
+        <span th:text="${message}">Message</span>
+        <table class="table table-striped" border="1">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Created at</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="group,iterationStatus : ${crmgroups}">
+                <td th:text="${group.id}">Id</td>
+                <td><a th:href="${'/crmproducts/' + group.id}" th:text="${group.name}">Name</a></td>
+                <td th:text="${group.createdAt}">Created At</td>
+                <td><a th:href="${'/crmgroup/edit/' + group.id}">Edit</a></td>
+                <td><a th:href="${'/crmgroup/delete/' + group.id}">Delete</a></td>
+            </tr>
+        <form class="form-horizontal" th:action="@{'/crmgroup/create/'}">
+            <div class="row">
+            <input type="submit" value="Create"/>
+    </div>
+            </form>
+        <form class="form-horizontal" th:action="@{'/crmgroup/send_groups_report/'}" method="post">
+            <div class="row">
+            <input type="submit" value="Send report"/>
+    </div>
+            </form>
+        </table>
 
-    <tr>
-        <th>ID</th>
-        <th>NAME</th>
-        <th>CREATED_AT</th>
-    </tr>
-    <tr th:each="group : ${groupsList}">
-        <td th:text="${group.id}"></td>
-        <td>
-            <a th:href="@{/crmproducts(groupId=${group.id})}" class="btn btn-danger" th:text="${group.name}"></a>
-        </td>
-        <td th:text="${#dates.format(group.createdAt, 'yyyy-MM-dd')}"></td>
-        <td>
-            <form th:action="@{delete_group}" method="get">
-                <input type="hidden" name="groupId" th:value="${group.id}" />
-                <input type="submit" value="Delete" class="btn btn-danger" />
-            </form>
-        </td>
-        <td>
-            <form th:action="@{edit_group}" method="get">
-                <input type="hidden" name="groupId" th:value="${group.id}" />
-                <input type="submit" value="Edit" class="btn btn-danger" />
-            </form>
-        </td>
-    </tr>
-</table>
-<br>
-<br>
-<form action="send_groups_report" method="post">
-    <input type="hidden" name="groups" th:value="${groupsList}" />
-    <input type="submit" value="Send report" class="btn btn-danger"/>
-</form>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-sm-7">
+            <!-- Pagination Bar -->
+            <div th:fragment='paginationbar'>
+                <div class="text-center">
+                    <ul class='pagination pagination-centered'>
+                        <td th:class="${page.firstPage}?'disabled':''">
+                            <span th:if='${page.firstPage}'>← First</span>
+                            <a th:if='${not page.firstPage}' th:href='@{${page.url}(page=0,size=${page.size})}'>←
+                                First</a>
+                        </td>
+                        <td th:class="${page.hasPreviousPage}? '' : 'disabled'">
+                            <span th:if='${not page.hasPreviousPage}'>«</span>
+                            <a th:if='${page.hasPreviousPage}'
+                               th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'
+                               title='Go to previous page'>«</a>
+                        </td>
+                        <td th:each='item : ${page.items}' th:class="${item.current}? 'active' : ''">
+                            <span th:if='${item.current}' th:text='${item.number}'>1</span>
+                            <a th:if='${not item.current}'
+                               th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span
+                                    th:text='${item.number}'>1</span></a>
+                        </td>
+                        <td th:class="${page.hasNextPage}? '' : 'disabled'">
+                            <span th:if='${not page.hasNextPage}'>»</span>
+                            <a th:if='${page.hasNextPage}'
+                               th:href='@{${page.url}(page=${page.number},size=${page.size})}'
+                               title='Go to next page'>»</a>
+                        </td>
+                        <td th:class="${page.lastPage}? 'disabled' : ''">
+                            <span th:if='${page.lastPage}'>Last →</span>
+                            <a th:if='${not page.lastPage}'
+                               th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'>Last →</a>
+                        </td>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
 </body>
 </html>

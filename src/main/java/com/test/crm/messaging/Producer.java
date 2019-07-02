@@ -13,19 +13,19 @@ import org.springframework.stereotype.Component;
 public class Producer {
 
     @Autowired
-    JmsTemplate jmsTemplate;
+    private JmsTemplate jmsTemplate;
 
     @Value("${spring.activemq.group.queue}")
-    String groupQueue;
+    private String groupQueue;
 
     @Value("${spring.activemq.product.queue}")
-    String productQueue;
+    private String productQueue;
 
     @Value("${spring.activemq.group.storage.queue}")
-    String groupStorageQueue;
+    private String groupStorageQueue;
 
     @Value("${spring.activemq.product.storage.queue}")
-    String productStorageQueue;
+    private String productStorageQueue;
 
     public void send(Group group){
         jmsTemplate.convertAndSend(groupQueue, group);

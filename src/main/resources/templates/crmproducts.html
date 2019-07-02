@@ -1,76 +1,109 @@
-<html xmlns:th="http://thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <title>Display Products Details</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Groups</title>
+
 </head>
 <body>
-<table border="1">
-    <form th:action="@{crmproducts}" th:object="${product}" method="post">
-        <input type="hidden" name="errorGroupId" th:value="${errorGroupId}" />
-        <label>NAME</label>
-        <br>
-        <input type="text" id="name" name="name" th:field="${product.name}" class="form-control"/>
-        <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
-        <br>
-        <br>
-        <label>CREATED_AT</label>
-        <br>
-        <input type="date" id="createdAt" name="createdAt" th:field="${product.createdAt}" class="form-control"/>
-        <label th:if="${#fields.hasErrors('createdAt')}" th:class="'error'" th:errors="*{createdAt}">Error createdAt</label>
-        <br>
-        <br>
-        <label>ARTICLE</label>
-        <br>
-        <input type="text" id="article" name="article" th:field="${product.article}" class="form-control"/>
-        <label th:if="${#fields.hasErrors('article')}" th:class="'error'" th:errors="*{article}">Error article</label>
-        <br>
-        <br>
-        <label>GROUP_ID</label>
-        <br>
-        <input type="text" id="groupId" name="groupId" th:field="${product.groupId}" class="form-control"/>
-        <label th:if="${#fields.hasErrors('groupId')}" th:class="'error'" th:errors="*{groupId}">Error groupId</label>
-        <br>
-        <br>
-        <input type="submit" value="Create" class="btn btn-danger"/>
-    </form>
-    <br>
-    <br>
-    <tr>
-        <th>ID</th>
-        <th>NAME</th>
-        <th>CREATED_AT</th>
-        <th>ARTICLE</th>
-        <th>GROUP_ID</th>
-    </tr>
-    <tr th:each="product : ${productsList}">
-        <td th:text="${product.id}">ID</td>
-        <td th:text="${product.name}">NAME</td>
-        <td th:text="${product.createdAt}">CREATED_AT</td>
-        <td th:text="${product.article}">ARTICLE</td>
-        <td th:text="${product.groupId.id}">GROUP_ID</td>
-        <td>
-            <form th:action="@{delete_product}" method="get">
-                <input type="hidden" name="productId" th:value="${product.id}" />
-                <input type="submit" value="Delete" class="btn btn-danger" />
+<div class="container">
+    <div th:if="${not #lists.isEmpty(crmproducts)}">
+        <h2>List products</h2>
+        <span th:text="${message}">Message</span>
+        <table class="table table-striped" border="1">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Created at</th>
+                <th>Article</th>
+                <th>Product id</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="product,iterationStatus : ${crmproducts}">
+                <td th:text="${product.id}">Id</td>
+                <td th:text="${product.name}">Name</td>
+                <td th:text="${product.createdAt}">Created At</td>
+                <td th:text="${product.article}">Article</td>
+                <td th:text="${product.groupId.id}">Product id</td>
+                <td><a th:href="${'/crmproducts/edit/' + product.id}">Edit</a></td>
+                <td><a th:href="${'/crmproducts/delete/' + product.id}">Delete</a></td>
+            </tr>
+            <form class="form-horizontal" th:action="@{'/crmproducts/create/'}">
+                <div class="row">
+                    <input type="submit" value="Create"/>
+                </div>
             </form>
-        </td>
-        <td>
-            <form th:action="@{edit_product}" method="get">
-                <input type="hidden" name="productId" th:value="${product.id}" />
-                <input type="submit" value="Edit" class="btn btn-danger" />
+            <form class="form-horizontal" th:action="@{'/crmproducts/send_products_report/' + groupId}" method="post">
+                <div class="row">
+                    <input type="submit" value="Send report"/>
+                </div>
             </form>
-        </td>
+        </table>
 
-    </tr>
-</table>
-<br>
-<br>
-<form action="crmgroups" >
-    <input type="submit" value="To groups" class="btn btn-danger"/>
-</form>
-<form action="send_products_report" method="post">
-    <input type="hidden" name="errorGroupId" th:value="${errorGroupId}" />
-    <input type="submit" value="Send report" class="btn btn-danger"/>
-</form>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-sm-7">
+            <!-- Pagination Bar -->
+            <div th:fragment='paginationbar'>
+                <div class="text-center">
+                    <ul class='pagination pagination-centered'>
+                        <td th:class="${page.firstPage}?'disabled':''">
+                            <span th:if='${page.firstPage}'>← First</span>
+                            <a th:if='${not page.firstPage}'
+                               th:href='@{${page.url}(groupId=${groupId},page=0,size=${page.size})}'>←
+                                First</a>
+                        </td>
+                        <td th:class="${page.hasPreviousPage}? '' : 'disabled'">
+                            <span th:if='${not page.hasPreviousPage}'>«</span>
+                            <a th:if='${page.hasPreviousPage}'
+                               th:href='@{${page.url}(groupId=${groupId},page=${page.number-2},size=${page.size})}'
+                               title='Go to previous page'>«</a>
+                        </td>
+                        <td th:each='item : ${page.items}' th:class="${item.current}? 'active' : ''">
+                            <span th:if='${item.current}' th:text='${item.number}'>1</span>
+                            <a th:if='${not item.current}'
+                               th:href='@{${page.url}(groupId=${groupId},page=${item.number-1},size=${page.size})}'><span
+                                    th:text='${item.number}'>1</span></a>
+                        </td>
+                        <td th:class="${page.hasNextPage}? '' : 'disabled'">
+                            <span th:if='${not page.hasNextPage}'>»</span>
+                            <a th:if='${page.hasNextPage}'
+                               th:href='@{${page.url}(groupId=${groupId},page=${page.number},size=${page.size})}'
+                               title='Go to next page'>»</a>
+                        </td>
+                        <td th:class="${page.lastPage}? 'disabled' : ''">
+                            <span th:if='${page.lastPage}'>Last →</span>
+                            <a th:if='${not page.lastPage}'
+                               th:href='@{${page.url}(groupId=${groupId},page=${page.totalPages - 1},size=${page.size})}'>Last
+                                →</a>
+
+                        </td>
+
+                        <td th:class="${page.lastPage}? 'disabled' : ''">
+                            <span th:if='${page.lastPage}'>go →</span>
+                            <a th:if='${not page.lastPage}'
+                               th:href="@{${page.url} + '/' + ${groupId}(page=${page.totalPages - 1},size=${page.size})}">go
+                                →</a>
+
+                        </td>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <form class="form-horizontal" th:action="@{'/crmgroups'}" method="get">
+        <div class="row">
+            <input type="submit" value="Back to groups"/>
+        </div>
+    </form>
+
+</div>
+
 </body>
 </html>

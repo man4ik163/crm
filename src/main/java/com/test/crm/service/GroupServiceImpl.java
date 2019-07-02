@@ -3,6 +3,8 @@ package com.test.crm.service;
 import com.test.crm.model.Group;
 import com.test.crm.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,5 +43,10 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void deleteGroup(Group group){
         groupRepository.delete(group);
+    }
+
+    @Transactional
+    public Page<Group> findAllPages(Pageable pageable){
+        return groupRepository.findAll(pageable);
     }
 }

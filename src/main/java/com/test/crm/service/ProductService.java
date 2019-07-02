@@ -2,6 +2,8 @@ package com.test.crm.service;
 
 import com.test.crm.model.Group;
 import com.test.crm.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -20,4 +22,6 @@ public interface ProductService {
     Product findById(Long id);
 
     List<Product> findAllByArticle(String article);
+
+    Page<Product> findAllPages(Pageable pageable);
 }

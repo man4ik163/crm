@@ -1,22 +1,24 @@
 package com.test.crm.controller;
 
 import com.test.crm.messaging.Producer;
+import com.test.crm.model.Group;
 import com.test.crm.model.Product;
 import com.test.crm.model.ProductStorage;
 import com.test.crm.service.GroupServiceImpl;
 import com.test.crm.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -40,85 +42,43 @@ public class ProductController {
         this.producer = producer;
     }
 
-    @RequestMapping(value = "/crmproducts", method = RequestMethod.GET)
-    public ModelAndView crmProducts(@RequestParam(name="groupId")String groupId) {
-        List<Product> products = productService.findAllByGroupId(groupService.findById(Long.valueOf(groupId)));
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("crmproducts");
-        if(products != null && !products.isEmpty()) mav.addObject("productsList", products);
-        mav.addObject("product", new Product());
-        mav.addObject("errorGroupId", groupId); //TODO change name
-        return mav;
+    @RequestMapping(value = "/crmproducts/{groupId}", method = RequestMethod.GET)
+//    @RequestMapping(value = "/crmproducts/", method = RequestMethod.GET)
+    public String listGroups(@PathVariable Long groupId, Model model, Pageable pageable) {
+        Page<Product> productPage = productService.findAllPages(groupService.findById(groupId), pageable);
+        PageWrapper<Product> page = new PageWrapper<Product>(productPage, "/crmproducts");
+        model.addAttribute("crmproducts", page.getContent());
+        model.addAttribute("page", page);
+        model.addAttribute("groupId", groupId);
+        return "crmproducts";
     }
 
-    @RequestMapping(value = "/delete_product", method = RequestMethod.GET)
-    public String deleteProduct(@RequestParam(name="productId")String productId) {
-        Product product = productService.findById(Long.valueOf(productId));
+    @RequestMapping(value = "/crmproducts/delete/{id}")
+    public String deleteGroup(@PathVariable Long id, RedirectAttributes redirectAttributes, Model model) {
+        Product product = productService.findById(id);
         Long groupId = product.getGroupId().getId();
-        productService.deleteProduct(product);
-        return "redirect:/crmproducts?groupId=" + groupId;
-    }
+        try {
+            model.addAttribute("groupId", groupId);
+            redirectAttributes.addFlashAttribute("groupId", groupId);
+            productService.deleteProduct(product);
+        } catch (Exception ex) {
+            System.err.println("Delete error:" + ex.getMessage());
+            redirectAttributes.addFlashAttribute("message", "Error delete.");
 
-    @RequestMapping(value = "/edit_product", method = RequestMethod.GET)
-    public ModelAndView editProduct(@RequestParam(name="productId")String productId) {
-        Product product = productService.findById(Long.valueOf(productId));
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("edit_product");
-        mav.addObject("product", product);
-        return mav;
-    }
-
-    @RequestMapping(value = "/save_product", method = RequestMethod.POST)
-    public ModelAndView saveProduct(@ModelAttribute("product") Product product, Model model) {
-        productService.createProduct(product);
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("edit_product");
-        mav.addObject("product", product);
-        return mav;
-    }
-    @RequestMapping(value = "/crmproducts", method = RequestMethod.POST)
-    public ModelAndView createProduct(@ModelAttribute("product") @Valid Product product, BindingResult bindingResult,
-                                @ModelAttribute("errorGroupId") String groupId, Model model) {
-        ModelAndView mav = new ModelAndView();
-        if(bindingResult.hasErrors()) {
-            mav.setViewName("crmproducts");
-            mav.addObject("groupId", groupId);
-            return mav;
         }
-        if (product.getArticle() != null && !product.getArticle().isEmpty()
-                && !productService.findAllByArticle(product.getArticle()).isEmpty()) {
-            FieldError fieldError = new FieldError("product", "article", "not unique article");
-            bindingResult.addError(fieldError);
-            mav.setViewName("crmproducts");
-            mav.addObject("groupId", groupId);
-            return mav;
-        }
-
-        if (product.getGroupId() != null
-                && groupService.findById(product.getGroupId().getId()) == null) {
-            FieldError fieldError = new FieldError("product", "groupId", "not valid groupId");
-            bindingResult.addError(fieldError);
-            mav.setViewName("crmproducts");
-            mav.addObject("groupId", groupId);
-            return mav;
-        }
-        productService.createProduct(product);
-        mav.setViewName("redirect:/crmproducts?groupId=" + product.getGroupId().getId());
-        return mav;
+        return "redirect:/crmproducts/" + groupId;
     }
 
-    @RequestMapping(value = "/send_products_report", method = RequestMethod.POST)
-    public ModelAndView sendGroupsReport(@ModelAttribute("errorGroupId") String groupId, Model model) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("crmproducts");
-        List<Product> products = productService.findAllByGroupId(groupService.findById(Long.valueOf(groupId)));
-        if(products != null && !products.isEmpty()){
-            mav.addObject("productsList", products);
+    @RequestMapping(value = "crmproducts/send_products_report/{groupId}", method = RequestMethod.POST)
+    public String sendGroupsReport(RedirectAttributes redirectAttributes, @PathVariable Long groupId) {
+        List<Product> products = productService.findAllByGroupId(groupService.findById(groupId));
+        if (products != null && !products.isEmpty()) {
             productStorage.addAll(products);
             producer.send(productStorage);
+            productStorage.clear();
+            redirectAttributes.addFlashAttribute("message", "Report sent.");
+            redirectAttributes.addFlashAttribute("groupId", groupId);
         }
-        mav.addObject("product", new Product());
-        mav.addObject("groupId", groupId);
-        return mav;
+        return "redirect:crmproducts";
     }
 }
