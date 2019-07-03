@@ -1,7 +1,6 @@
 package com.test.crm.controller;
 
 import com.test.crm.messaging.Producer;
-import com.test.crm.model.Group;
 import com.test.crm.model.Product;
 import com.test.crm.model.ProductStorage;
 import com.test.crm.service.GroupServiceImpl;
@@ -14,11 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -43,7 +40,6 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/crmproducts/{groupId}", method = RequestMethod.GET)
-//    @RequestMapping(value = "/crmproducts/", method = RequestMethod.GET)
     public String listGroups(@PathVariable Long groupId, Model model, Pageable pageable) {
         Page<Product> productPage = productService.findAllPages(groupService.findById(groupId), pageable);
         PageWrapper<Product> page = new PageWrapper<Product>(productPage, "/crmproducts");
@@ -53,7 +49,7 @@ public class ProductController {
         return "crmproducts";
     }
 
-    @RequestMapping(value = "/crmproducts/delete/{id}")
+    @RequestMapping(value = "/crmproduct/delete/{id}")
     public String deleteGroup(@PathVariable Long id, RedirectAttributes redirectAttributes, Model model) {
         Product product = productService.findById(id);
         Long groupId = product.getGroupId().getId();
@@ -64,7 +60,6 @@ public class ProductController {
         } catch (Exception ex) {
             System.err.println("Delete error:" + ex.getMessage());
             redirectAttributes.addFlashAttribute("message", "Error delete.");
-
         }
         return "redirect:/crmproducts/" + groupId;
     }
@@ -79,6 +74,54 @@ public class ProductController {
             redirectAttributes.addFlashAttribute("message", "Report sent.");
             redirectAttributes.addFlashAttribute("groupId", groupId);
         }
-        return "redirect:crmproducts";
+        return "redirect:/crmproducts/" + groupId;
+    }
+
+    @RequestMapping("crmproduct/edit/{id}")
+    public String editProduct(@PathVariable Long id, Model model) {
+        Product product = productService.findById(id);
+        model.addAttribute("product", product);
+        model.addAttribute("groupId", product.getGroupId().getId());
+        return "product_edit_form";
+    }
+
+    @RequestMapping("crmproduct/create/{groupId}")
+    public String createProduct(@PathVariable Long groupId, Model model) {
+        model.addAttribute("product", new Product());
+        model.addAttribute("groupId", groupId);
+        return "product_create_form";
+    }
+
+    @RequestMapping("save_product/{groupId}")
+    public String saveProduct(@Valid Product product, BindingResult bindingResult,@PathVariable Long groupId, Model model) {
+        if(bindingResult.hasErrors()){
+            model.addAttribute("product", product);
+            model.addAttribute("groupId", groupId);
+            return getMapping(product);
+        }
+        if(groupService.findById(product.getGroupId().getId()) == null){
+            FieldError fieldError = new FieldError("product", "groupId", "not valid groupId");
+            bindingResult.addError(fieldError);
+            return getMapping(product);
+        }
+        if(!productService.findAllByArticle(product.getArticle()).isEmpty() &&
+            !product.getId().equals(productService.findByArticle(product.getArticle()).getId())){
+            FieldError fieldError = new FieldError("product", "article", "not unique article");
+            bindingResult.addError(fieldError);
+            return getMapping(product);
+        }
+        productService.createProduct(product);
+        return "redirect:/crmproducts/" + product.getGroupId().getId();
+    }
+
+    private String getMapping(Product product){
+        if(product.getId() != null){
+            return "product_edit_form";
+        }
+        if(product.getId() == null){
+            return "product_create_form";
+        }
+        return "redirect:crmgroups/";
     }
 }
+

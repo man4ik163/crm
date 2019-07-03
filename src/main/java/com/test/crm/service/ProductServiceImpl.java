@@ -57,6 +57,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
+    public Product findByArticle(String article){
+        return productRepository.findByArticle(article);
+    }
+
+    @Transactional
     public Page<Product> findAllPages(Pageable pageable){
         return productRepository.findAll(pageable);
     }

@@ -16,7 +16,7 @@
                 <th>Name</th>
                 <th>Created at</th>
                 <th>Article</th>
-                <th>Product id</th>
+                <th>Group id</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -26,23 +26,27 @@
                 <td th:text="${product.createdAt}">Created At</td>
                 <td th:text="${product.article}">Article</td>
                 <td th:text="${product.groupId.id}">Product id</td>
-                <td><a th:href="${'/crmproducts/edit/' + product.id}">Edit</a></td>
-                <td><a th:href="${'/crmproducts/delete/' + product.id}">Delete</a></td>
+                <td><a th:href="${'/crmproduct/edit/' + product.id}">Edit</a></td>
+                <td><a th:href="${'/crmproduct/delete/' + product.id}">Delete</a></td>
             </tr>
-            <form class="form-horizontal" th:action="@{'/crmproducts/create/'}">
-                <div class="row">
-                    <input type="submit" value="Create"/>
-                </div>
-            </form>
-            <form class="form-horizontal" th:action="@{'/crmproducts/send_products_report/' + groupId}" method="post">
+            <br>
+            <form class="form-horizontal" th:action="@{'/crmproducts/send_products_report/' + ${groupId}}"
+                  method="post">
                 <div class="row">
                     <input type="submit" value="Send report"/>
                 </div>
             </form>
+            <br>
         </table>
-
+        <br>
     </div>
-
+    <div class="row">
+        <form class="form-horizontal" th:action="@{'/crmproduct/create/' + ${groupId}(groupId=${groupId})}">
+            <div class="row">
+                <input type="submit" value="Create"/>
+            </div>
+        </form>
+    </div>
 
     <div class="row">
 
@@ -54,39 +58,31 @@
                         <td th:class="${page.firstPage}?'disabled':''">
                             <span th:if='${page.firstPage}'>← First</span>
                             <a th:if='${not page.firstPage}'
-                               th:href='@{${page.url}(groupId=${groupId},page=0,size=${page.size})}'>←
+                               th:href="@{${page.url} + '/' + ${groupId}(groupId=${groupId},page=0,size=${page.size})}">←
                                 First</a>
                         </td>
                         <td th:class="${page.hasPreviousPage}? '' : 'disabled'">
                             <span th:if='${not page.hasPreviousPage}'>«</span>
                             <a th:if='${page.hasPreviousPage}'
-                               th:href='@{${page.url}(groupId=${groupId},page=${page.number-2},size=${page.size})}'
+                               th:href="@{${page.url} + '/' + ${groupId}(groupId=${groupId},page=${page.number-2},size=${page.size})}"
                                title='Go to previous page'>«</a>
                         </td>
                         <td th:each='item : ${page.items}' th:class="${item.current}? 'active' : ''">
                             <span th:if='${item.current}' th:text='${item.number}'>1</span>
                             <a th:if='${not item.current}'
-                               th:href='@{${page.url}(groupId=${groupId},page=${item.number-1},size=${page.size})}'><span
+                               th:href="@{${page.url} + '/' + ${groupId}(groupId=${groupId},page=${item.number-1},size=${page.size})}"><span
                                     th:text='${item.number}'>1</span></a>
                         </td>
                         <td th:class="${page.hasNextPage}? '' : 'disabled'">
                             <span th:if='${not page.hasNextPage}'>»</span>
                             <a th:if='${page.hasNextPage}'
-                               th:href='@{${page.url}(groupId=${groupId},page=${page.number},size=${page.size})}'
+                               th:href="@{${page.url} + '/' + ${groupId}(groupId=${groupId},page=${page.number},size=${page.size})}"
                                title='Go to next page'>»</a>
                         </td>
                         <td th:class="${page.lastPage}? 'disabled' : ''">
                             <span th:if='${page.lastPage}'>Last →</span>
                             <a th:if='${not page.lastPage}'
-                               th:href='@{${page.url}(groupId=${groupId},page=${page.totalPages - 1},size=${page.size})}'>Last
-                                →</a>
-
-                        </td>
-
-                        <td th:class="${page.lastPage}? 'disabled' : ''">
-                            <span th:if='${page.lastPage}'>go →</span>
-                            <a th:if='${not page.lastPage}'
-                               th:href="@{${page.url} + '/' + ${groupId}(page=${page.totalPages - 1},size=${page.size})}">go
+                               th:href="@{${page.url} + '/' + ${groupId}(groupId=${groupId},page=${page.totalPages - 1},size=${page.size})}">Last
                                 →</a>
 
                         </td>

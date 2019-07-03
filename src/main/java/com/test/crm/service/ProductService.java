@@ -23,5 +23,7 @@ public interface ProductService {
 
     List<Product> findAllByArticle(String article);
 
+    Product findByArticle(String article);
+
     Page<Product> findAllPages(Pageable pageable);
 }

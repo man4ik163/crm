@@ -10,11 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -43,7 +42,7 @@ public class GroupController {
         return "crmgroups";
     }
 
-    @RequestMapping(value = "crmgroup/send_groups_report", method = RequestMethod.POST)
+    @RequestMapping(value = "crmgroups/send_groups_report", method = RequestMethod.POST)
     public String sendGroupsReport(RedirectAttributes redirectAttributes) {
         List<Group> groups = groupService.findAll();
         if(groups != null && !groups.isEmpty()) {
@@ -67,5 +66,30 @@ public class GroupController {
         return "redirect:/crmgroups";
     }
 
+    @RequestMapping("crmgroup/edit/{id}")
+    public String editGroup(@PathVariable Long id, Model model) {
+        model.addAttribute("group", groupService.findById(id));
+        return "group_edit_form";
+    }
+
+    @RequestMapping("crmgroup/create/")
+    public String createGroup(Model model) {
+        model.addAttribute("group", new Group());
+        return "group_create_form";
+    }
+
+    @RequestMapping("save_group")
+    public String saveGroup(@Valid Group group, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            if(group.getId() != null){
+                return "group_edit_form";
+            }
+            if(group.getId() == null){
+                return "group_create_form";
+            }
+        }
+        groupService.createGroup(group);
+        return "redirect:/crmgroups";
+    }
 
 }

@@ -25,21 +25,24 @@
                 <td><a th:href="${'/crmgroup/edit/' + group.id}">Edit</a></td>
                 <td><a th:href="${'/crmgroup/delete/' + group.id}">Delete</a></td>
             </tr>
-        <form class="form-horizontal" th:action="@{'/crmgroup/create/'}">
-            <div class="row">
-            <input type="submit" value="Create"/>
-    </div>
+            <br>
+            <form class="form-horizontal" th:action="@{'/crmgroups/send_groups_report/'}" method="post">
+                <div class="row">
+                    <input type="submit" value="Send report"/>
+                </div>
             </form>
-        <form class="form-horizontal" th:action="@{'/crmgroup/send_groups_report/'}" method="post">
-            <div class="row">
-            <input type="submit" value="Send report"/>
-    </div>
-            </form>
+            <br>
         </table>
 
     </div>
-
-
+    <br>
+    <div class="row">
+        <form class="form-horizontal" th:action="@{'/crmgroup/create/'}">
+            <div class="row">
+                <input type="submit" value="Create"/>
+            </div>
+        </form>
+    </div>
     <div class="row">
 
         <div class="col-sm-7">
