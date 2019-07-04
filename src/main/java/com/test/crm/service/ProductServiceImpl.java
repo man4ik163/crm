@@ -15,11 +15,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    private final ProductRepository productRepository;
-
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private ProductRepository productRepository;
 
     @Transactional
     public List<Product> findAllByName(String name) {

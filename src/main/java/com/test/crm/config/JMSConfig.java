@@ -14,7 +14,6 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
-
 @Configuration
 public class JMSConfig {
 
@@ -27,11 +26,8 @@ public class JMSConfig {
     @Value("${spring.activemq.broker-url}")
     private String brokerUrl;
 
-    /*
-     * Initial ConnectionFactory
-     */
     @Bean
-    public ConnectionFactory connectionFactory(){
+    public ConnectionFactory connectionFactory() {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
         connectionFactory.setBrokerURL(brokerUrl);
         connectionFactory.setUserName(userName);
@@ -39,7 +35,7 @@ public class JMSConfig {
         return connectionFactory;
     }
 
-    @Bean // Serialize message content to json using TextMessage
+    @Bean
     public MessageConverter jacksonJmsMessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
@@ -47,9 +43,6 @@ public class JMSConfig {
         return converter;
     }
 
-    /*
-     * Used for Receiving Message
-     */
     @Bean
     public JmsListenerContainerFactory<?> jsaFactory(ConnectionFactory connectionFactory,
                                                      DefaultJmsListenerContainerFactoryConfigurer configurer) {
@@ -59,9 +52,6 @@ public class JMSConfig {
         return factory;
     }
 
-    /*
-     * Used for Sending Messages.
-     */
     @Bean
     public JmsTemplate jmsTemplate(){
         JmsTemplate template = new JmsTemplate();

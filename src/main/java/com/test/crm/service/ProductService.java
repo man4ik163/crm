@@ -26,4 +26,6 @@ public interface ProductService {
     Product findByArticle(String article);
 
     Page<Product> findAllPages(Pageable pageable);
+
+    Page<Product> findAllPages(Group groupId, Pageable pageable);
 }

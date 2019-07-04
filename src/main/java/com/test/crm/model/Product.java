@@ -19,11 +19,9 @@ import java.util.Date;
 @Table(name = "crm_product")
 public class Product implements Serializable {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "id", nullable = false)
     Long id;
 
     @NotEmpty(message = "not valid name")
@@ -39,7 +37,7 @@ public class Product implements Serializable {
 
     @NotEmpty(message = "not valid article")
     @NotNull(message = "not valid article")
-    @Column(name = "article")
+    @Column(name = "article", unique = true)
     String article;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

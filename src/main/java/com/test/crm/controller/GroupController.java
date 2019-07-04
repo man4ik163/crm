@@ -3,9 +3,10 @@ package com.test.crm.controller;
 import com.test.crm.messaging.Producer;
 import com.test.crm.model.Group;
 import com.test.crm.model.GroupStorage;
-import com.test.crm.service.GroupServiceImpl;
+import com.test.crm.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,23 +19,28 @@ import java.util.List;
 
 @Controller
 public class GroupController {
-    @Autowired
-    private final GroupServiceImpl groupService;
 
     @Autowired
-    private final Producer producer;
+    private GroupService groupService;
 
     @Autowired
-    private final GroupStorage groupStorage;
+    private Producer producer;
 
-    public GroupController(GroupServiceImpl groupService, Producer producer, GroupStorage groupStorage) {
-        this.groupService = groupService;
-        this.producer = producer;
-        this.groupStorage = groupStorage;
+    @Autowired
+    private GroupStorage groupStorage;
+
+    @RequestMapping(value = {"/crmgroups", "/"}, method = RequestMethod.GET)
+    public String listGroups(Model model, Pageable pageable) {
+        Page<Group> groupPage = groupService.findAllPages(pageable);
+        PageWrapper<Group> page = new PageWrapper<Group>(groupPage, "/crmgroups");
+        model.addAttribute("crmgroups", page.getContent());
+        model.addAttribute("page", page);
+        return "crmgroups";
     }
 
-    @RequestMapping(value = "/crmgroups", method = RequestMethod.GET)
-    public String listGroups(Model model, Pageable pageable) {
+    @RequestMapping(value = {"/crmgroups", "/"}, method = RequestMethod.POST)
+    public String listGroups(Model model) {
+        Pageable pageable = PageRequest.of(0, 20);
         Page<Group> groupPage = groupService.findAllPages(pageable);
         PageWrapper<Group> page = new PageWrapper<Group>(groupPage, "/crmgroups");
         model.addAttribute("crmgroups", page.getContent());

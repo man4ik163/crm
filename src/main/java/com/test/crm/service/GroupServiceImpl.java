@@ -14,11 +14,7 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
 
     @Autowired
-    private final GroupRepository groupRepository;
-
-    public GroupServiceImpl(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
-    }
+    private GroupRepository groupRepository;
 
     @Transactional
     public List<Group> findAll() {
