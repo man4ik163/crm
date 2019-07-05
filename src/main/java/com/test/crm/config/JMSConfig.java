@@ -1,7 +1,5 @@
 package com.test.crm.config;
 
-import javax.jms.ConnectionFactory;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -13,6 +11,8 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
+
+import javax.jms.ConnectionFactory;
 
 @Configuration
 public class JMSConfig {
@@ -53,7 +53,7 @@ public class JMSConfig {
     }
 
     @Bean
-    public JmsTemplate jmsTemplate(){
+    public JmsTemplate jmsTemplate() {
         JmsTemplate template = new JmsTemplate();
         template.setMessageConverter(jacksonJmsMessageConverter());
         template.setConnectionFactory(connectionFactory());

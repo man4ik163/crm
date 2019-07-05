@@ -7,34 +7,37 @@
 
 <div>
     <form th:action="@{/save_product/{groupId}(groupId=${groupId})}" th:object="${product}" method="post">
-        <label>Name</label>
-        <br>
-        <input type="text" id="name" name="name" th:field="${product.name}"/>
-        <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
-        <br>
-        <br>
-        <label>Created at</label>
-        <br>
-        <input type="date" id="createdAt" name="createdAt" th:field="${product.createdAt}"/>
-        <label th:if="${#fields.hasErrors('createdAt')}" th:class="'error'" th:errors="*{createdAt}">Error createdAt</label>
-        <br>
-        <br>
-        <label>Article</label>
-        <br>
-        <input type="text" id="article" name="article" th:field="${product.article}"/>
-        <label th:if="${#fields.hasErrors('article')}" th:class="'error'" th:errors="*{article}">Error article</label>
-        <br>
-        <br>
-        <label>Group id</label>
-        <br>
-        <input type="text" id="groupId" name="groupId" th:field="${product.groupId}"/>
-        <label th:if="${#fields.hasErrors('groupId')}" th:class="'error'" th:errors="*{groupId}">Error group id</label>
-        <br>
-        <br>
-        <input type="submit" value="Save" class="btn btn-danger"/>
+        <p>
+            <label>Name</label>
+            <input type="text" id="name" name="name" th:field="${product.name}"/>
+            <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
+        </p>
+        <p>
+            <label>Created at</label>
+            <input type="date" id="createdAt" name="createdAt" th:field="${product.createdAt}"/>
+            <label th:if="${#fields.hasErrors('createdAt')}" th:class="'error'" th:errors="*{createdAt}">Error
+                createdAt</label>
+        </p>
+        <p>
+            <label>Article</label>
+            <input type="text" id="article" name="article" th:field="${product.article}"/>
+            <label th:if="${#fields.hasErrors('article')}" th:class="'error'" th:errors="*{article}">Error
+                article</label>
+        </p>
+        <p>
+            <label>Group id</label>
+            <input type="text" id="groupId" name="groupId" th:field="${product.groupId}"/>
+            <label th:if="${#fields.hasErrors('groupId')}" th:class="'error'" th:errors="*{groupId}">Error group
+                id</label>
+        </p>
+        <p>
+            <input type="submit" value="Save" class="btn btn-danger"/>
+        </p>
     </form>
     <form th:action="@{'/crmproducts/' + ${groupId}(groupId=${groupId})}" method="get">
-        <input type="submit" value="Back" class="btn btn-danger"/>
+        <p>
+            <input type="submit" value="Back" class="btn btn-danger"/>
+        </p>
     </form>
 </div>
 </body>

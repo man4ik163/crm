@@ -38,32 +38,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public void deleteProduct(Product product){
+    public void deleteProduct(Product product) {
         productRepository.delete(product);
     }
 
     @Transactional
-    public Product findById(Long id){
+    public Product findById(Long id) {
         return productRepository.getOne(id);
     }
 
     @Transactional
-    public List<Product> findAllByArticle(String article){
+    public List<Product> findAllByArticle(String article) {
         return productRepository.findAllByArticle(article);
     }
 
     @Transactional
-    public Product findByArticle(String article){
+    public Product findByArticle(String article) {
         return productRepository.findByArticle(article);
     }
 
     @Transactional
-    public Page<Product> findAllPages(Pageable pageable){
+    public Page<Product> findAllPages(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
 
     @Transactional
-    public Page<Product> findAllPages(Group groupId, Pageable pageable){
+    public Page<Product> findAllPages(Group groupId, Pageable pageable) {
         return productRepository.findAllByGroupId(groupId, pageable);
     }
 }

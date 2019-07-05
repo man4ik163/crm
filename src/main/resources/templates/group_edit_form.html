@@ -7,28 +7,27 @@
 
 <div>
     <form th:action="@{/save_group}" th:object="${group}" method="post">
-        <label>Id</label>
-        <br>
-        <input type="text" id="id" name="id" th:field="${group.id}" th:readonly="true"/>
-        <br>
-        <br>
-        <label>Name</label>
-        <br>
-        <input type="text" id="name" name="name" th:field="${group.name}"/>
-        <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
-        <br>
-        <br>
-        <label>Created at</label>
-        <br>
-        <input type="date" id="createdAt" name="createdAt" th:field="${group.createdAt}" th:readonly="true"/>
-        <br>
-        <br>
-        <input type="submit" value="Save" class="btn btn-danger"/>
+        <p>
+            <label>Id</label>
+            <input type="text" id="id" name="id" th:field="${group.id}" th:readonly="true"/>
+        </p>
+        <p>
+            <label>Name</label>
+            <input type="text" id="name" name="name" th:field="${group.name}"/>
+            <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
+        </p>
+        <p>
+            <label>Created at</label>
+            <input type="date" id="createdAt" name="createdAt" th:field="${group.createdAt}" th:readonly="true"/>
+        </p>
+        <p>
+            <input type="submit" value="Save" class="btn btn-danger"/>
+        </p>
     </form>
     <form class="form-horizontal" th:action="@{'/crmgroups'}" method="get">
-        <div class="row">
+        <p>
             <input type="submit" value="Back to groups"/>
-        </div>
+        </p>
     </form>
 </div>
 </body>

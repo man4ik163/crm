@@ -8,24 +8,25 @@
 
 <div>
     <form th:action="@{/registration}" th:object="${user}" method="post">
-        <label>Name</label>
-        <br>
-        <input type="text" id="name" name="name" th:field="${user.name}"/>
-        <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
-        <br>
-        <br>
-        <label>Password</label>
-        <br>
-        <input type="password" id="password" name="password" th:field="${user.password}"/>
-        <label th:if="${#fields.hasErrors('password')}" th:class="'error'" th:errors="*{password}">Error password</label>
-        <br>
-        <br>
-        <input type="submit" value="Save" class="btn btn-danger"/>
+        <p>
+            <label>Name</label>
+            <input type="text" id="name" name="name" th:field="${user.name}"/>
+            <label th:if="${#fields.hasErrors('name')}" th:class="'error'" th:errors="*{name}">Error name</label>
+        </p>
+        <P>
+            <label>Password</label>
+            <input type="password" id="password" name="password" th:field="${user.password}"/>
+            <label th:if="${#fields.hasErrors('password')}" th:class="'error'" th:errors="*{password}">Error
+                password</label>
+        </P>
+        <p>
+            <input type="submit" value="Save" class="btn btn-danger"/>
+        </p>
     </form>
     <form class="form-horizontal" th:action="@{'/authorization_form'}" method="get">
-        <div class="row">
+        <p>
             <input type="submit" value="Back"/>
-        </div>
+        </p>
     </form>
 </div>
 </body>

@@ -27,19 +27,19 @@ public class Producer {
     @Value("${spring.activemq.product.storage.queue}")
     private String productStorageQueue;
 
-    public void send(Group group){
+    public void send(Group group) {
         jmsTemplate.convertAndSend(groupQueue, group);
     }
 
-    public void send(Product product){
+    public void send(Product product) {
         jmsTemplate.convertAndSend(productQueue, product);
     }
 
-    public void send(GroupStorage groupStorage){
+    public void send(GroupStorage groupStorage) {
         jmsTemplate.convertAndSend(groupStorageQueue, groupStorage);
     }
 
-    public void send(ProductStorage productStorage){
+    public void send(ProductStorage productStorage) {
         jmsTemplate.convertAndSend(productStorageQueue, productStorage);
     }
 }

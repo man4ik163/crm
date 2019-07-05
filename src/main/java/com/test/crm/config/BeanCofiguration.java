@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Configuration;
 public class BeanCofiguration {
 
     @Bean
-    public GroupStorage groupStorage(){
+    public GroupStorage groupStorage() {
         return new GroupStorage();
     }
 
     @Bean
-    public ProductStorage productStorage(){
+    public ProductStorage productStorage() {
         return new ProductStorage();
     }
 

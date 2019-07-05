@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -51,7 +53,7 @@ public class GroupController {
     @RequestMapping(value = "crmgroups/send_groups_report", method = RequestMethod.POST)
     public String sendGroupsReport(RedirectAttributes redirectAttributes) {
         List<Group> groups = groupService.findAll();
-        if(groups != null && !groups.isEmpty()) {
+        if (groups != null && !groups.isEmpty()) {
             groupStorage.addAll(groups);
             producer.send(groupStorage);
             groupStorage.clear();
@@ -61,11 +63,11 @@ public class GroupController {
     }
 
     @RequestMapping(value = "crmgroup/delete/{id}")
-    public String deleteGroup(@PathVariable Long id,  RedirectAttributes redirectAttributes){
-        try{
+    public String deleteGroup(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
             groupService.deleteGroup(groupService.findById(id));
-        }catch(Exception ex){
-            System.err.println("Delete error:"+ex.getMessage());
+        } catch (Exception ex) {
+            System.err.println("Delete error:" + ex.getMessage());
             redirectAttributes.addFlashAttribute("message", "This group have products.");
 
         }
@@ -86,11 +88,11 @@ public class GroupController {
 
     @RequestMapping("save_group")
     public String saveGroup(@Valid Group group, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            if(group.getId() != null){
+        if (bindingResult.hasErrors()) {
+            if (group.getId() != null) {
                 return "group_edit_form";
             }
-            if(group.getId() == null){
+            if (group.getId() == null) {
                 return "group_create_form";
             }
         }

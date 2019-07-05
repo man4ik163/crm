@@ -22,19 +22,19 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String createUser(Model model){
+    public String createUser(Model model) {
         model.addAttribute("user", new User());
         return "registration_form";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String saveUser(@Valid User user, BindingResult bindingResult){
+    public String saveUser(@Valid User user, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getAllErrors());
             return "registration_form";
         }
-        if(userService.findByName(user.getName()) != null){
+        if (userService.findByName(user.getName()) != null) {
             FieldError fieldError = new FieldError("user", "name", "this user exist");
             bindingResult.addError(fieldError);
             return "registration_form";

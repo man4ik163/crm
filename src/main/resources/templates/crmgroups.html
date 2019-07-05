@@ -11,31 +11,34 @@
         <h2>List groups</h2>
         <span th:text="${message}">Message</span>
         <table class="table table-striped" border="1">
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Created at</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-            <tr th:each="group,iterationStatus : ${crmgroups}">
-                <td th:text="${group.id}">Id</td>
-                <td><a th:href="${'/crmproducts/' + group.id}" th:text="${group.name}">Name</a></td>
-                <td th:text="${group.createdAt}">Created At</td>
-                <td><a th:href="${'/crmgroup/edit/' + group.id}">Edit</a></td>
-                <td><a th:href="${'/crmgroup/delete/' + group.id}">Delete</a></td>
-            </tr>
-            <br>
-            <form class="form-horizontal" th:action="@{'/crmgroups/send_groups_report/'}" method="post">
-                <div class="row">
-                    <input type="submit" value="Send report"/>
-                </div>
-            </form>
-            <br>
+            <p>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Created at</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                <tr th:each="group,iterationStatus : ${crmgroups}">
+                    <td th:text="${group.id}">Id</td>
+                    <td><a th:href="${'/crmproducts/' + group.id}" th:text="${group.name}">Name</a></td>
+                    <td th:text="${group.createdAt}">Created At</td>
+                    <td><a th:href="${'/crmgroup/edit/' + group.id}">Edit</a></td>
+                    <td><a th:href="${'/crmgroup/delete/' + group.id}">Delete</a></td>
+                </tr>
+            </p>
+
         </table>
+        <p>
+        <form class="form-horizontal" th:action="@{'/crmgroups/send_groups_report/'}" method="post">
+            <div class="row">
+                <input type="submit" value="Send report"/>
+            </div>
+        </form>
+        </p>
 
     </div>
-    <br>
+    <p>
     <div class="row">
         <form class="form-horizontal" th:action="@{'/crmgroup/create/'}">
             <div class="row">
@@ -43,7 +46,7 @@
             </div>
         </form>
     </div>
-    <br>
+    </p>
     <div class="row">
         <form th:action="@{/logout}" method="post">
             <div>

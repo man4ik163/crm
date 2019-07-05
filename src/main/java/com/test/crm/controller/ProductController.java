@@ -88,20 +88,20 @@ public class ProductController {
     }
 
     @RequestMapping("save_product/{groupId}")
-    public String saveProduct(@Valid Product product, BindingResult bindingResult,@PathVariable Long groupId, Model model) {
-        if(bindingResult.hasErrors()){
+    public String saveProduct(@Valid Product product, BindingResult bindingResult, @PathVariable Long groupId, Model model) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("product", product);
             model.addAttribute("groupId", groupId);
             return getMapping(product);
         }
-        if(groupService.findById(product.getGroupId().getId()) == null){
+        if (groupService.findById(product.getGroupId().getId()) == null) {
             FieldError fieldError = new FieldError("product", "groupId", "not valid groupId");
             bindingResult.addError(fieldError);
             return getMapping(product);
         }
-        if(product.getArticle() != null &&
-            !productService.findAllByArticle(product.getArticle()).isEmpty() &&
-            !product.getId().equals(productService.findByArticle(product.getArticle()).getId())){
+        if (product.getArticle() != null &&
+                !productService.findAllByArticle(product.getArticle()).isEmpty() &&
+                !product.getId().equals(productService.findByArticle(product.getArticle()).getId())) {
             FieldError fieldError = new FieldError("product", "article", "not unique article");
             bindingResult.addError(fieldError);
             return getMapping(product);
@@ -110,11 +110,11 @@ public class ProductController {
         return "redirect:/crmproducts/" + product.getGroupId().getId();
     }
 
-    private String getMapping(Product product){
-        if(product.getId() != null){
+    private String getMapping(Product product) {
+        if (product.getId() != null) {
             return "product_edit_form";
         }
-        if(product.getId() == null){
+        if (product.getId() == null) {
             return "product_create_form";
         }
         return "redirect:crmgroups/";

@@ -25,23 +25,17 @@ public class PageWrapper<T> {
         this.url = url;
         items = new ArrayList<PageItem>();
 
-        currentNumber = page.getNumber() + 1; //start from 1 to match page.page
+        currentNumber = page.getNumber() + 1;
 
-        int start, size;
+        int start = 1;
+        int size = MAX_PAGE_ITEM_DISPLAY;
+
         if (page.getTotalPages() <= MAX_PAGE_ITEM_DISPLAY) {
-            start = 1;
             size = page.getTotalPages();
+        } else if (currentNumber >= page.getTotalPages() - MAX_PAGE_ITEM_DISPLAY / 2) {
+            start = page.getTotalPages() - MAX_PAGE_ITEM_DISPLAY + 1;
         } else {
-            if (currentNumber <= MAX_PAGE_ITEM_DISPLAY - MAX_PAGE_ITEM_DISPLAY / 2) {
-                start = 1;
-                size = MAX_PAGE_ITEM_DISPLAY;
-            } else if (currentNumber >= page.getTotalPages() - MAX_PAGE_ITEM_DISPLAY / 2) {
-                start = page.getTotalPages() - MAX_PAGE_ITEM_DISPLAY + 1;
-                size = MAX_PAGE_ITEM_DISPLAY;
-            } else {
-                start = currentNumber - MAX_PAGE_ITEM_DISPLAY / 2;
-                size = MAX_PAGE_ITEM_DISPLAY;
-            }
+            start = currentNumber - MAX_PAGE_ITEM_DISPLAY / 2;
         }
 
         for (int i = 0; i < size; i++) {
@@ -53,7 +47,7 @@ public class PageWrapper<T> {
         return items;
     }
 
-    public void setItems(List<PageItem> items){
+    public void setItems(List<PageItem> items) {
         this.items = items;
     }
 

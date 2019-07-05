@@ -12,7 +12,6 @@ public class AuthorizationController {
     @RequestMapping(value = "/authorization_form", method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "error", required = false) String error,
                               @RequestParam(value = "logout", required = false) String logout) {
-        System.out.println("auth");
         ModelAndView model = new ModelAndView();
         model.setViewName("authorization_form");
         return model;

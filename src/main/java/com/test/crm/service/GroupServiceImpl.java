@@ -32,17 +32,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Transactional
-    public Group findById(Long id){
+    public Group findById(Long id) {
         return groupRepository.getOne(id);
     }
 
     @Transactional
-    public void deleteGroup(Group group){
+    public void deleteGroup(Group group) {
         groupRepository.delete(group);
     }
 
     @Transactional
-    public Page<Group> findAllPages(Pageable pageable){
+    public Page<Group> findAllPages(Pageable pageable) {
         return groupRepository.findAll(pageable);
     }
 }
