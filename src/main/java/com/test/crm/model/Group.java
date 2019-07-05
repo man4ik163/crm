@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -25,8 +26,7 @@ public class Group implements Serializable {
     @NonNull
     Long id;
 
-    @NotEmpty(message = "not valid name")
-    @NotNull(message = "not valid name")
+    @NotBlank(message = "not valid name")
     @Column(name = "name")
     String name;
 

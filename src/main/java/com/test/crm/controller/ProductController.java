@@ -99,7 +99,8 @@ public class ProductController {
             bindingResult.addError(fieldError);
             return getMapping(product);
         }
-        if(!productService.findAllByArticle(product.getArticle()).isEmpty() &&
+        if(product.getArticle() != null &&
+            !productService.findAllByArticle(product.getArticle()).isEmpty() &&
             !product.getId().equals(productService.findByArticle(product.getArticle()).getId())){
             FieldError fieldError = new FieldError("product", "article", "not unique article");
             bindingResult.addError(fieldError);

@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -24,8 +25,7 @@ public class Product implements Serializable {
     @Column(name = "id", nullable = false)
     Long id;
 
-    @NotEmpty(message = "not valid name")
-    @NotNull(message = "not valid name")
+    @NotBlank(message = "not valid name")
     @Column(name = "name")
     String name;
 
@@ -35,8 +35,7 @@ public class Product implements Serializable {
     @Temporal(TemporalType.DATE)
     Date createdAt;
 
-    @NotEmpty(message = "not valid article")
-    @NotNull(message = "not valid article")
+    @NotBlank(message = "not valid article")
     @Column(name = "article", unique = true)
     String article;
 

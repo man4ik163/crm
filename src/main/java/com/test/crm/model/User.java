@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -25,13 +26,11 @@ public class User implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotEmpty(message = "not valid name")
-    @NotNull(message = "not valid name")
+    @NotBlank(message = "not valid name")
     @Column(name = "name", unique = true)
     private String name;
 
-    @NotEmpty(message = "not valid password")
-    @NotNull(message = "not valid password")
+    @NotBlank(message = "not valid password")
     @Column(name = "password")
     private String password;
 
@@ -39,7 +38,7 @@ public class User implements Serializable {
     private Boolean active;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "crm_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
